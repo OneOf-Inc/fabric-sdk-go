@@ -8,11 +8,12 @@ package signingmgr
 
 import (
 	"bytes"
-	"encoding/json"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"io"
 	"net/http"
+	"os"
 
 	"github.com/hyperledger/fabric-sdk-go/pkg/common/providers/core"
 
@@ -44,7 +45,7 @@ type RemoteSignatureResponse struct {
 
 func Sign(ski []byte, digest []byte) (signature []byte, err error) {
 	// POST /fabric-cryptosuit/:enrollmentID/key
-	keygen_url := fmt.Sprintf("http://oneof_wallet:4000/fabric-cryptosuit/key/%x/sign", string(ski))
+	keygen_url := fmt.Sprintf("%s/fabric-cryptosuit/key/%x/sign", os.Getenv("EXT_WALLET_ADDR"), string(ski))
 
 	sigReq := &RemoteSignatureRequest{
 		Data: hex.EncodeToString(digest),
